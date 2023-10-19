@@ -30,15 +30,20 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-    const userCollection = client.db("userDB").collection("users");
+    const brandCollection = client.db("brandDB").collection("brand");
 
     //read data from database
      // read single data
-     app.get("/users", async (req, res) => {
-      const result = await userCollection.find().toArray();
-      res.send(result);
-    });
+     
 
+
+    //add product 
+    app.post('/brand',async(req,res)=>{
+      const newBrand = req.body
+      console.log(newBrand)
+      const result = await brandCollection.insertOne(newBrand)
+      res.send(result)
+    })
 
 
 
