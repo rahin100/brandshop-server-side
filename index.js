@@ -45,6 +45,13 @@ async function run() {
       res.send(result)
     })
 
+    //read data 
+    app.get('/brand', async(req,res)=>{
+      const cursor = brandCollection.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
 
 
 
