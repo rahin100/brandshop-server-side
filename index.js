@@ -32,8 +32,22 @@ async function run() {
     await client.connect();
     const brandCollection = client.db("brandDB").collection("brand");
 
-    //read data from database
-     // read single data
+    const addToCartCollection = client.db("cartDB").collection("cart");
+
+    //cart data added
+    app.post('/cart',async(req,res)=>{
+      const newCart = req.body
+      console.log(newCart)
+      const result = await addToCartCollection.insertOne(newCart)
+      res.send(result)
+    })
+    
+     // cart data read
+     app.get('/cart',async(req,res)=>{
+      const cursor = addToCartCollection.find()
+      const result = await cursor.toArray()
+      res.send(result)
+     })
      
 
 
@@ -70,7 +84,7 @@ run().catch(console.dir);
 
 
 app.get("/", (req, res) => {
-  res.send("brand shop is running..");
+  res.send("brand shop is running.");
 });
 
 app.listen(port, () => {
