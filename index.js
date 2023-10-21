@@ -32,11 +32,12 @@ async function run() {
 
     //cart data added
     app.post("/cart", async (req, res) => {
-      const newCart = req.body;
+      const newCart = req.body
       console.log(newCart);
       const result = await addToCartCollection.insertOne(newCart);
       res.send(result);
     });
+
 
     // cart data read
     app.get("/cart", async (req, res) => {
@@ -51,7 +52,6 @@ async function run() {
       res.send(result);
     });
 
-    //update data
     app.put("/cart/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
@@ -87,7 +87,6 @@ async function run() {
       res.send(result);
     });
 
-
     // brand data ............................
 
     //add product
@@ -114,7 +113,39 @@ async function run() {
       res.send(result);
     });
 
+    // app.get("/brand/:brandName", async (req, res) => {
+    //   const brandName = req.params.brandName;
+    //   const query = { brandname: brandName }; // Use the correct key, which should match the field in your database
+    //   const result = await brandCollection.findOne(query);
+    //   res.send(result);
+    // });
+    
+    
 
+    //update data
+    app.put("/brand/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const data = req.body;
+      const updatedData = {
+        $set: {
+          image: data.image,
+          name: data.name,
+          brandname: data.brandname,
+          type: data.type,
+          price: data.price,
+          shortdescription: data.shortdescription,
+          rating: data.rating,
+        },
+      };
+      const result = await brandCollection.updateOne(
+        filter,
+        updatedData,
+        options
+      );
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
